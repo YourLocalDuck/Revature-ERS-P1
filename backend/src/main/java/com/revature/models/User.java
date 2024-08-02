@@ -2,11 +2,16 @@ package com.revature.models;
 
 import org.springframework.stereotype.Component;
 
+import com.revature.models.DTOs.IncomingUserDTO;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,15 +35,29 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
     public User() {
     }
 
-    public User(int userId, String firstName, String lastName, String username, String password) {
+    public User(int userId, String firstName, String lastName, String username, String password, Role role) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
+        this.role = role;
+    }
+
+    public User(IncomingUserDTO user)
+    {
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.role = new Role(user.getRoleId(), null);
     }
 
     public int getUserId() {
@@ -81,6 +100,18 @@ public class User {
         this.password = password;
     }
 
-    
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", username="
+                + username + ", password=" + password + ", role=" + role + "]";
+    }
 
 }
