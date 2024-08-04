@@ -18,12 +18,16 @@ public class RoleService {
         this.roleDAO = roleDAO;
     }
 
+    private boolean isRoleValid(int id) {
+        return roleDAO.findById(id).isPresent();
+    }
+
     public List<Role> getAllRoles() {
         return roleDAO.findAll();
     }
 
     public Role getRoleById(int id) {
-        return roleDAO.findById(id).get();
+        return roleDAO.findById(id).isPresent() ? roleDAO.findById(id).get() : null;
     }
 
     public Role addRole(Role role) {
@@ -32,11 +36,20 @@ public class RoleService {
 
     public Role updateRole(int id, Role role) {
         role.setRoleId(id);
-        return roleDAO.save(role);
+        if (isRoleValid(id)) {
+            return roleDAO.save(role);
+        } else {
+            return null;
+        }
     }
 
-    public void deleteRole(int id) {
-        roleDAO.deleteById(id);
+    public boolean deleteRole(int id) {
+        if (isRoleValid(id)) {
+            roleDAO.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

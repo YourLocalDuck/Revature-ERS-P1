@@ -38,24 +38,36 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         User user = userService.getUserById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody IncomingUserDTO incomingUser) {
         User newUser = userService.addUser(incomingUser);
+        if (newUser == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.status(201).body(newUser);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody IncomingUserDTO incomingUser) {
         User updatedUser = userService.updateUser(id, incomingUser);
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.status(201).body(updatedUser);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
-        userService.deleteUser(id);
+        boolean deleted = userService.deleteUser(id);
+        if (!deleted) {
+            return ResponseEntity.notFound().build();
+        }
         return ResponseEntity.noContent().build();
     }
     

@@ -24,12 +24,16 @@ public class UserService {
         this.roleDAO = roleDAO;
     }
 
+    private boolean isRoleValid(int id) {
+        return roleDAO.findById(id).isPresent();
+    }
+
     public List<User> getAllUsers() {
         return userDAO.findAll();
     }
 
     public User getUserById(int id) {
-        return userDAO.findById(id).get();
+        return userDAO.findById(id).isPresent() ? userDAO.findById(id).get() : null;
     }
 
     public User addUser(IncomingUserDTO incomingUser) {
@@ -44,6 +48,9 @@ public class UserService {
     }
 
     public User updateUser(int id, IncomingUserDTO incomingUser) {
+        if (!userDAO.findById(id).isPresent()) {
+            return null;
+        }
         User user = new User(incomingUser);
         Optional<Role> role = roleDAO.findById(incomingUser.getRoleId());
         if (role.isPresent()) {
@@ -55,8 +62,12 @@ public class UserService {
         return userDAO.save(user);
     }
 
-    public void deleteUser(int id) {
+    public boolean deleteUser(int id) {
+        if (!userDAO.findById(id).isPresent()) {
+            return false;
+        }
         userDAO.deleteById(id);
+        return true;
     }
 
     public boolean login(String username, String password) {

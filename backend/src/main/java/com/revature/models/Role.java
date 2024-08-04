@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "roles")
@@ -18,7 +19,8 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int roleId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @NotNull(message = "Field roleName is mandatory")
     private String roleName;
 
     public Role() {

@@ -13,6 +13,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "users")
@@ -24,19 +25,24 @@ public class User {
     private int userId;
 
     @Column(nullable = false)
+    @NotNull(message = "Field firstName is mandatory")
     private String firstName;
 
     @Column(nullable = false)
+    @NotNull(message = "Field lastName is mandatory")
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
+    @NotNull(message = "Field userName is mandatory")
     private String username;
 
     @Column(nullable = false)
+    @NotNull(message = "Field password is mandatory")
     private String password;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
+    @NotNull(message = "Field role is mandatory")
     private Role role;
 
     public User() {
