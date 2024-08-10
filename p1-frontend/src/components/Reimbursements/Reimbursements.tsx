@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { ReimbursementInterface } from '../../interfaces/ReimbursementInterface';
 import ReimbursementsTable from './ReimbursementsTable';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { ReimbursementsContext } from '../../contexts/ReimbursementContext';
 
 type Props = {}
 
 const Reimbursements = (props: Props) => {
 
-  const [reimbursements, setReimbursements] = useState<ReimbursementInterface[]>([]);
+  const navigate = useNavigate()
+
+  const {reimbursements, setReimbursements, fetchReimbursements} = useContext(ReimbursementsContext)
 
   useEffect(() => {
-    getAllReimbursements();
+    if (reimbursements.length === 0)
+    {
+      fetchReimbursements();
+    }
+    
   }, []);
 
-  const getAllReimbursements= async () => {
-    const response = await fetch("http://localhost:8080/reimbursements");
-    const data = await response.json();
-    setReimbursements(data);
+  const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    navigate(path);
   };
 
   const onEdit = (reimbursement: any) => {
@@ -37,7 +44,7 @@ const Reimbursements = (props: Props) => {
                         <h2 className="text-start">Reimbursements</h2>
                     </div>
                     <div className="col-sm-4 text-end">
-                        <Button variant="success" className="mb-3"><FaPlus /> Add New</Button>
+                        <Button variant="success" className="mb-3" onClick={handleNavigation("/reimbursements/add")}><FaPlus /> Add New</Button>
                     </div>
                 </div>
                 <ReimbursementsTable reimbursements={reimbursements} onEdit={onEdit} onDelete={onDelete} />

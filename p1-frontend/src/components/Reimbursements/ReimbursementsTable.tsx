@@ -2,6 +2,7 @@ import React from 'react'
 import { ReimbursementInterface } from '../../interfaces/ReimbursementInterface';
 import { Table, Button } from 'react-bootstrap';
 import { FaPencilAlt, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {
     reimbursements: ReimbursementInterface[]
@@ -10,6 +11,8 @@ type Props = {
 }
 
 const ReimbursementsTable = (props: Props) => {
+    const navigate = useNavigate()
+
   return (
     <Table striped bordered hover>
             <thead>
@@ -30,7 +33,7 @@ const ReimbursementsTable = (props: Props) => {
                         <td>{reimb.statusId?.status}</td>
                         <td>{reimb.userId?.username}</td>
                         <td>
-                            <Button variant="warning" size="sm" onClick={() => props.onEdit(reimb)} className="me-2">
+                            <Button variant="warning" size="sm" onClick={() => navigate(`/reimbursements/edit/${reimb.reimbursementId}`)} className="me-2">
                                 <FaPencilAlt />
                             </Button>
                             <Button variant="danger" size="sm" onClick={() => reimb.reimbursementId && props.onDelete(reimb.reimbursementId)}>

@@ -10,6 +10,7 @@ import Roles from "./components/Roles/Roles";
 import ReimbursementStatuses from "./components/ReimbursementStatuses/ReimbursementStatuses";
 import Reimbursements from "./components/Reimbursements/Reimbursements";
 import Sidebar from "./components/Sidebar";
+import AddUpdateReimbursements from "./components/Reimbursements/AddUpdateReimbursements";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -49,6 +50,10 @@ function App() {
                   <Route path="/users" element={<Users />} />
                   <Route path="/roles" element={<Roles />} />
                   <Route path="/reimbursements" element={<Reimbursements />} />
+                  <Route path="/reimbursements/add" element={<AddUpdateReimbursements />} />
+                  <Route
+                    path="/reimbursements/edit/:id"
+                    element={<AddUpdateReimbursements />} />
                   <Route
                     path="/reimbursement-statuses"
                     element={<ReimbursementStatuses />}
