@@ -55,9 +55,9 @@ const AddUpdateReimbursements = (props: Props) => {
 
   const patchValues = () => {
     if (id) {
-      const reimb = reimbursements.find((r) => r.reimbursementId === +id);
-      if (reimb) {
-        setReimb(reimb);
+      const curReimb = reimbursements.find((r) => r.reimbursementId === +id);
+      if (curReimb) {
+        setReimb(curReimb);
       }
     }
   };
@@ -84,7 +84,7 @@ const AddUpdateReimbursements = (props: Props) => {
             "Content-Type": "application/json",
           },
           method: "PUT",
-          body: JSON.stringify(reimb),
+          body: JSON.stringify({reimb}),
         }
       )
         .then((response) => response.json())
