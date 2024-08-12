@@ -181,6 +181,13 @@ const AddUpdateUsers = (props: Props) => {
               </Form.Group>
               <br></br>
               <div className="d-flex justify-content-end">
+                <Button
+                  variant="primary"
+                  className="btn-lg btn-primary"
+                  onClick={() => navigate("/users")}
+                >
+                  Back
+                </Button>
                 <Button type="submit" className="btn-lg btn-primary">
                   Submit
                 </Button>

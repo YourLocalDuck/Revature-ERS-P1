@@ -21,7 +21,7 @@ const AddUpdateReimbursementStatuses = (props: Props) => {
 
   // Current form state
   const [status, setStatus] = React.useState<any>({
-    status: ""
+    status: "",
   });
 
   useEffect(() => {
@@ -56,7 +56,7 @@ const AddUpdateReimbursementStatuses = (props: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const reqStatus = {
-      status: status.status
+      status: status.status,
     };
 
     if (id) {
@@ -92,14 +92,17 @@ const AddUpdateReimbursementStatuses = (props: Props) => {
           console.log(error);
         });
     } else {
-      const response = await fetch("http://localhost:8080/reimbursement-status", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        method: "POST",
-        body: JSON.stringify(reqStatus),
-      })
+      const response = await fetch(
+        "http://localhost:8080/reimbursement-status",
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify(reqStatus),
+        }
+      )
         .then((response) => response.json())
         .then((json: ReimbursementStatusInterface) => {
           setReimbursementStatuses([json, ...reimbursementStatuses]);
@@ -113,31 +116,40 @@ const AddUpdateReimbursementStatuses = (props: Props) => {
     }
   };
 
-  return <div>
-  <Row className="justify-content-md-center w-100">
-    <Col md={6}>
-      <div className="p-5 border rounded shadow-sm bg-white">
-        <Form onSubmit={handleSubmit}>
-          <Form.Group className="mb-3" controlId="status">
-            <Form.Label>Status</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter Status"
-              defaultValue={status?.status}
-              onChange={(e) => handleChange(e)}
-            />
-          </Form.Group>
-          <br></br>
-          <div className="d-flex justify-content-end">
-            <Button type="submit" className="btn-lg btn-primary">
-              Submit
-            </Button>
+  return (
+    <div>
+      <Row className="justify-content-md-center w-100">
+        <Col md={6}>
+          <div className="p-5 border rounded shadow-sm bg-white">
+            <Form onSubmit={handleSubmit}>
+              <Form.Group className="mb-3" controlId="status">
+                <Form.Label>Status</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter Status"
+                  defaultValue={status?.status}
+                  onChange={(e) => handleChange(e)}
+                />
+              </Form.Group>
+              <br></br>
+              <div className="d-flex justify-content-end">
+                <Button
+                  variant="primary"
+                  className="btn-lg btn-primary"
+                  onClick={() => navigate("/reimbursement-statuses")}
+                >
+                  Back
+                </Button>
+                <Button type="submit" className="btn-lg btn-primary">
+                  Submit
+                </Button>
+              </div>
+            </Form>
           </div>
-        </Form>
-      </div>
-    </Col>
-  </Row>
-</div>;
+        </Col>
+      </Row>
+    </div>
+  );
 };
 
 export default AddUpdateReimbursementStatuses;

@@ -8,6 +8,7 @@ import { ReimbursementsContext } from "../../contexts/ReimbursementContext";
 import { ReimbursementStatusesContext } from "../../contexts/ReimbursementStatusContext";
 import { UsersContext } from "../../contexts/UserContext";
 import toast from "react-hot-toast";
+import { AuthContext } from "../../contexts/AuthContext";
 
 type Props = {};
 
@@ -26,6 +27,7 @@ const AddUpdateReimbursements = (props: Props) => {
     setReimbursementStatuses,
     fetchReimbursementStatuses,
   } = useContext(ReimbursementStatusesContext);
+  const { user } = useContext(AuthContext);
 
   // Current Reimbursement state
   const [reimb, setReimb] = React.useState<any>({
@@ -85,8 +87,8 @@ const AddUpdateReimbursements = (props: Props) => {
     const reqReimb = {
       amount: reimb.amount,
       description: reimb.description,
-      statusId: reimb.statusId,
-      userId: reimb.userId,
+      statusId: user.role?.roleName === "Employee" ? reimbursementStatuses.find(r => r.status === "PENDING")?.statusId : reimb.statusId,
+      userId: user.role?.roleName === "Employee" ? user.userId : reimb.userId,
     };
 
     if (id) {
@@ -167,38 +169,50 @@ const AddUpdateReimbursements = (props: Props) => {
                   onChange={(e) => handleChange(e)}
                 />
               </Form.Group>
-              <Form.Group className="mb-3" controlId="statusId">
-                <Form.Label>Status</Form.Label>
-                <Form.Select
-                  aria-label="status"
-                  value={reimb?.statusId}
-                  onChange={(e) => handleChange(e)}
-                >
-                  <option>Select Status</option>
-                  {reimbursementStatuses.map((status) => (
-                    <option key={status.statusId} value={status.statusId}>
-                      {status.status}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="userId">
-                <Form.Label>User</Form.Label>
-                <Form.Select
-                  aria-label="user"
-                  value={reimb?.userId}
-                  onChange={(e) => handleChange(e)}
-                >
-                  <option>Select User</option>
-                  {users.map((user) => (
-                    <option key={user.userId} value={user.userId}>
-                      {user.username}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
+              {user?.role?.roleName !== "Employee" && (
+                <>
+                  <Form.Group className="mb-3" controlId="statusId">
+                    <Form.Label>Status</Form.Label>
+                    <Form.Select
+                      aria-label="status"
+                      value={reimb?.statusId}
+                      onChange={(e) => handleChange(e)}
+                    >
+                      <option>Select Status</option>
+                      {reimbursementStatuses.map((status) => (
+                        <option key={status.statusId} value={status.statusId}>
+                          {status.status}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                  <Form.Group className="mb-3" controlId="userId">
+                    <Form.Label>User</Form.Label>
+                    <Form.Select
+                      aria-label="user"
+                      value={reimb?.userId}
+                      onChange={(e) => handleChange(e)}
+                    >
+                      <option>Select User</option>
+                      {users.map((user) => (
+                        <option key={user.userId} value={user.userId}>
+                          {user.username}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Form.Group>
+                </>
+              )}
+
               <br></br>
               <div className="d-flex justify-content-end">
+                <Button
+                  variant="primary"
+                  className="btn-lg btn-primary"
+                  onClick={() => navigate("/reimbursements")}
+                >
+                  Back
+                </Button>
                 <Button type="submit" className="btn-lg btn-primary">
                   Submit
                 </Button>

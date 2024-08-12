@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
+import React, { useContext, useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import LoginPage from "./components/LoginPage";
@@ -14,22 +12,20 @@ import AddUpdateReimbursements from "./components/Reimbursements/AddUpdateReimbu
 import AddUpdateReimbursementStatuses from "./components/ReimbursementStatuses/AddUpdateReimbursementStatuses";
 import AddUpdateRoles from "./components/Roles/AddUpdateRoles";
 import AddUpdateUsers from "./components/Users/AddEditUsers";
+import { AuthContext } from "./contexts/AuthContext";
+import Register from "./components/Register";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
+  const { user, setUser, fetchUser } = useContext(AuthContext);
+
   useEffect(() => {
-    // Check login status here (e.g., from local storage or an API call)
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-    }
-    setIsLoggedIn(true);
+    // Add any necessary logic here
   }, []);
 
   // Function to pass into the LoginPage component as prop.
-  const handleLogin = (email: string, password: string) => {
-    localStorage.setItem("token", "your-token");
+  const handleLogin = () => {
     setIsLoggedIn(true);
   };
 
@@ -46,10 +42,6 @@ function App() {
               <div className="p-2 flex-grow-1">
                 <Routes>
                   <Route path="/dashboard" element={<Dashboard />} />
-                  <Route
-                    path="/auth/login"
-                    element={<LoginPage onLogin={handleLogin} />}
-                  />
                   <Route path="/users" element={<Users />} />
                   <Route path="/users/add" element={<AddUpdateUsers />} />
                   <Route path="/users/edit/:id" element={<AddUpdateUsers />} />
@@ -75,7 +67,11 @@ function App() {
             </div>
           </div>
         ) : (
-          <></>
+          <Routes>
+            <Route path="/auth/login" element={<LoginPage onLogin={handleLogin} />} />
+            <Route path="/auth/register" element={<Register />} />
+            <Route path="/*" element={<LoginPage onLogin={handleLogin} />} />
+          </Routes>
         )}
       </BrowserRouter>
     </div>
