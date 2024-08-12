@@ -23,7 +23,7 @@ export default function ReimbursementStatusesProvider({ children }: Reimbursemen
     const [reimbursementStatuses, setReimbursementStatuses] = useState<ReimbursementStatusInterface[]>([]);
 
     const fetchReimbursementStatuses = async () => {
-        const response = await fetch("http://localhost:8080/reimbursement-status");
+        const response = await fetch("http://localhost:8080/reimbursement-status", {credentials: "include"});
         const data = await response.json();
         setReimbursementStatuses(data);
     };

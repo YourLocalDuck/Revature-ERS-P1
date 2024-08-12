@@ -76,4 +76,12 @@ public class ReimbursementService {
         return true;
     }
 
+    public List<Reimbursement> getReimbursementsByUserId(int userId) {
+        Optional<User> user = userDAO.findById(userId);
+        if (!user.isPresent()) {
+            return null;
+        }
+        return reimbursementDAO.findByUserIdUserId(userId);
+    }
+
 }

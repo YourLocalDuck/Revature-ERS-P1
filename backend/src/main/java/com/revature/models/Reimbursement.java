@@ -1,9 +1,12 @@
 package com.revature.models;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.stereotype.Component;
 
 import com.revature.models.DTOs.IncomingReimbursementDTO;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -39,6 +42,7 @@ public class Reimbursement {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     @NotNull(message = "Field userId is mandatory")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User userId;
 
     public Reimbursement() {

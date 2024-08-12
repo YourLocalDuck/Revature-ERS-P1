@@ -30,7 +30,7 @@ public class AuthService {
             OutgoingUserDTO outgoingUserDTO = new OutgoingUserDTO(u.getUserId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getRole());
             session.setAttribute("userId", u.getUserId());
             session.setAttribute("username", u.getUsername());
-            session.setAttribute("role", u.getRole());
+            session.setAttribute("role", u.getRole().getRoleName());
 
             return outgoingUserDTO;
         }

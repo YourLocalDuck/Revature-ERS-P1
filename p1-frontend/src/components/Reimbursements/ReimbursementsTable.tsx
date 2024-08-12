@@ -7,7 +7,8 @@ import { ReimbursementsContext } from "../../contexts/ReimbursementContext";
 import toast from "react-hot-toast";
 
 type Props = {
-  reimbursements: ReimbursementInterface[];
+  filteredReimbursements: ReimbursementInterface[];
+  setFilteredReimbursements: (reimbursements: ReimbursementInterface[]) => void;
 };
 
 const ReimbursementsTable = (props: Props) => {
@@ -39,6 +40,10 @@ const ReimbursementsTable = (props: Props) => {
       const updatedReimbursements = reimbursements.filter(
         (reimb) => reimb.reimbursementId !== deleteModal.id
       );
+      const updatedFilteredReimbursements = props.filteredReimbursements.filter(
+        (reimb) => reimb.reimbursementId !== deleteModal.id
+      );
+      props.setFilteredReimbursements(updatedFilteredReimbursements);
       setReimbursements(updatedReimbursements);
       toast.success(`Reimbursement id ${deleteModal.id} deleted successfully.`);
     } else {
@@ -60,7 +65,7 @@ const ReimbursementsTable = (props: Props) => {
           </tr>
         </thead>
         <tbody>
-          {reimbursements.map((reimb, index) => (
+          {props.filteredReimbursements.map((reimb, index) => (
             <tr key={reimb.reimbursementId}>
               <td>{reimb.reimbursementId}</td>
               <td>{reimb.description}</td>

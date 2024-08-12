@@ -24,7 +24,7 @@ export default function RolesProvider({ children }: RolesProviderProps) {
     const [roles, setRoles] = useState<RoleInterface[]>([]);
 
     const fetchRoles = async () => {
-        const response = await fetch("http://localhost:8080/roles");
+        const response = await fetch("http://localhost:8080/roles", {credentials: "include"});
         const data = await response.json();
         setRoles(data);
     };

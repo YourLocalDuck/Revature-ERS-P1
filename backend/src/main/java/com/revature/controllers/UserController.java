@@ -10,6 +10,7 @@ import com.revature.models.User;
 import com.revature.models.DTOs.IncomingUserDTO;
 import com.revature.services.UserService;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(origins="http://localhost:3000", allowCredentials = "true")
 public class UserController {
     private UserService userService;
 

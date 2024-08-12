@@ -18,7 +18,9 @@ const LoginPage = (props: Props) => {
       if (response.role != null) {
         props.onLogin();
         toast.success("Login successful");
-        navigate("/dashboard");
+        navigate("/reimbursements");
+      } else { 
+        toast.error("Login failed");
       }
   };
 

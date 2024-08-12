@@ -24,7 +24,7 @@ export default function UsersProvider({ children }: UsersProviderProps) {
     const [users, setUsers] = useState<UserInterface[]>([]);
 
     const fetchUsers = async () => {
-        const response = await fetch("http://localhost:8080/users");
+        const response = await fetch("http://localhost:8080/users", {credentials: "include"});
         const data = await response.json();
         setUsers(data);
     };
