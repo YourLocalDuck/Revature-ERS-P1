@@ -7,6 +7,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { ReimbursementsContext } from "../../contexts/ReimbursementContext";
 import { ReimbursementStatusesContext } from "../../contexts/ReimbursementStatusContext";
 import { UsersContext } from "../../contexts/UserContext";
+import toast from "react-hot-toast";
 
 type Props = {
   reimb?: ReimbursementInterface;
@@ -85,7 +86,6 @@ const AddUpdateReimbursements = (props: Props) => {
       statusId: reimb.statusId,
       userId: reimb.userId
     };
-    console.log(reqReimb);
     
     if (id) {
       const response = await fetch(
@@ -110,9 +110,11 @@ const AddUpdateReimbursements = (props: Props) => {
             ];
             setReimbursements(updatedReimbursements);
           }
+          toast.success(`Reimbursement ${id} updated successfully`);
           navigate("/reimbursements");
         })
         .catch((error) => {
+          toast.error(`Error updating reimbursement ${id}`);
           console.log(error);
         });
     } else {
@@ -127,10 +129,12 @@ const AddUpdateReimbursements = (props: Props) => {
         .then((response) => response.json())
         .then((json: ReimbursementInterface) => {
           setReimbursements([json, ...reimbursements]);
+          toast.success("Reimbursement added successfully");
           navigate("/reimbursements");
         })
         .catch((error) => {
           console.log(error);
+          toast.error("Error adding reimbursement");
         });
     }
   };

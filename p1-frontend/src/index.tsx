@@ -5,13 +5,14 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import ContextProvider from './contexts/ContextProvider';
+import { Toaster } from 'react-hot-toast';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <ContextProvider><App /></ContextProvider>
+    <ContextProvider><Toaster position='top-right'/><App /></ContextProvider>
   </React.StrictMode>
 );
 
