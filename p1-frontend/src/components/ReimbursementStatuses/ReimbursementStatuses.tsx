@@ -1,30 +1,31 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { ReimbursementStatusInterface } from "../../interfaces/ReimbursementStatusInterface";
 import { Row, Col, Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import ReimbursementStatusesTable from "./ReimbursementStatusesTable";
+import { useNavigate } from "react-router-dom";
+import { ReimbursementStatusesContext } from "../../contexts/ReimbursementStatusContext";
 
 type Props = {};
 
 const ReimbursementStatuses = (props: Props) => {
-  const [statuses, setStatuses] = useState<ReimbursementStatusInterface[]>([]);
+  const navigate = useNavigate()
+
+  const {reimbursementStatuses, setReimbursementStatuses, fetchReimbursementStatuses} = useContext(ReimbursementStatusesContext)
 
   useEffect(() => {
-    getAllStatuses();
+    if (reimbursementStatuses.length === 0)
+    {
+      fetchReimbursementStatuses();
+    }
   }, []);
 
-  const getAllStatuses = async () => {
-    const response = await fetch("http://localhost:8080/reimbursement-status");
-    const data = await response.json();
-    setStatuses(data);
-  };
+  const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    navigate(path);
+  }
 
-  const onEdit = (status: any) => {
-    console.log(status);
-  };
-  const onDelete = (statusId: number) => {
-    console.log(statusId);
-  };
+  
   return (
   <div>
     <Row className="justify-content-md-center w-100">
@@ -35,10 +36,10 @@ const ReimbursementStatuses = (props: Props) => {
                       <h2 className="text-start">Reimbursement Statuses</h2>
                   </div>
                   <div className="col-sm-4 text-end">
-                      <Button variant="success" className="mb-3"><FaPlus /> Add New</Button>
+                      <Button variant="success" className="mb-3" onClick={handleNavigation("/reimbursement-statuses/add")}><FaPlus /> Add New</Button>
                   </div>
               </div>
-              <ReimbursementStatusesTable reimbursementStatuses={statuses} onEdit={onEdit} onDelete={onDelete} />
+              <ReimbursementStatusesTable reimbursementStatuses={reimbursementStatuses}/>
           </div>
       </Col>
     </Row>

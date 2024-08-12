@@ -1,31 +1,32 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { RoleInterface } from '../../interfaces/RoleInterface';
 import RolesTable from './RolesTable';
 import { Row, Col, Button } from 'react-bootstrap';
 import { FaPlus } from 'react-icons/fa';
+import { RolesContext } from '../../contexts/RolesContext';
+import { useNavigate } from 'react-router-dom';
 
 type Props = {}
 
 const Roles = (props: Props) => {
 
-  const [roles, setRoles] = useState<RoleInterface[]>([]);
+  const navigate = useNavigate()
+
+  const {roles, setRoles, fetchRoles} = useContext(RolesContext)
 
   useEffect(() => {
-    getAllRoles();
+    if (roles.length === 0)
+    {
+      fetchRoles();
+    }
+    
   }, []);
 
-  const getAllRoles = async () => {
-    const response = await fetch("http://localhost:8080/roles");
-    const data = await response.json();
-    setRoles(data);
+  const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    navigate(path);
   };
 
-  const onEdit = (role: any) => {
-    console.log(role);
-  };
-  const onDelete = (roleId: number) => {
-    console.log(roleId);
-  };
   return (
     <div>
       <Row className="justify-content-md-center w-100">
@@ -36,10 +37,10 @@ const Roles = (props: Props) => {
                         <h2 className="text-start">Roles</h2>
                     </div>
                     <div className="col-sm-4 text-end">
-                        <Button variant="success" className="mb-3"><FaPlus /> Add New</Button>
+                        <Button variant="success" className="mb-3" onClick={handleNavigation("/roles/add")}><FaPlus /> Add New</Button>
                     </div>
                 </div>
-                <RolesTable roles={roles} onEdit={onEdit} onDelete={onDelete} />
+                <RolesTable roles={roles} />
             </div>
         </Col>
       </Row>

@@ -1,28 +1,29 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UsersTable from "./UsersTable";
 import { UserInterface } from "../../interfaces/UserInterface";
 import { Button, Col, Row } from "react-bootstrap";
 import { FaPlus } from 'react-icons/fa';
+import { useNavigate } from "react-router-dom";
+import { UsersContext } from "../../contexts/UserContext";
 
 type Props = {};
 
 const Users = (props: Props) => {
-  const [users, setUsers] = useState<UserInterface[]>([]);
+  const navigate = useNavigate()
+
+  const {users, setUsers, fetchUsers} = useContext(UsersContext)
+
   useEffect(() => {
-    getAllUsers();
+    if (users.length === 0)
+    {
+      fetchUsers();
+    }
+    
   }, []);
 
-  const getAllUsers = async () => {
-    const response = await fetch("http://localhost:8080/users");
-    const data = await response.json();
-    setUsers(data);
-  };
-
-  const onEdit = (user: any) => {
-    console.log(user);
-  };
-  const onDelete = (userId: number) => {
-    console.log(userId);
+  const handleNavigation = (path: string) => (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    navigate(path);
   };
 
   return (
@@ -35,10 +36,10 @@ const Users = (props: Props) => {
                         <h2 className="text-start">Users</h2>
                     </div>
                     <div className="col-sm-4 text-end">
-                        <Button variant="success" className="mb-3"><FaPlus /> Add New</Button>
+                        <Button variant="success" className="mb-3" onClick={handleNavigation("/users/add")}><FaPlus /> Add New</Button>
                     </div>
                 </div>
-                <UsersTable users={users} onEdit={onEdit} onDelete={onDelete} />
+                <UsersTable users={users} />
             </div>
         </Col>
       </Row>

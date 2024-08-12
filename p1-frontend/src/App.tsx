@@ -11,6 +11,9 @@ import ReimbursementStatuses from "./components/ReimbursementStatuses/Reimbursem
 import Reimbursements from "./components/Reimbursements/Reimbursements";
 import Sidebar from "./components/Sidebar";
 import AddUpdateReimbursements from "./components/Reimbursements/AddUpdateReimbursements";
+import AddUpdateReimbursementStatuses from "./components/ReimbursementStatuses/AddUpdateReimbursementStatuses";
+import AddUpdateRoles from "./components/Roles/AddUpdateRoles";
+import AddUpdateUsers from "./components/Users/AddEditUsers";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -48,7 +51,11 @@ function App() {
                     element={<LoginPage onLogin={handleLogin} />}
                   />
                   <Route path="/users" element={<Users />} />
+                  <Route path="/users/add" element={<AddUpdateUsers />} />
+                  <Route path="/users/edit/:id" element={<AddUpdateUsers />} />
                   <Route path="/roles" element={<Roles />} />
+                  <Route path="/roles/add" element={<AddUpdateRoles />} />
+                  <Route path="/roles/edit/:id" element={<AddUpdateRoles />} />
                   <Route path="/reimbursements" element={<Reimbursements />} />
                   <Route path="/reimbursements/add" element={<AddUpdateReimbursements />} />
                   <Route
@@ -58,6 +65,10 @@ function App() {
                     path="/reimbursement-statuses"
                     element={<ReimbursementStatuses />}
                   />
+                  <Route path="/reimbursement-statuses/add" element={<AddUpdateReimbursementStatuses />} />
+                  <Route
+                    path="/reimbursement-statuses/edit/:id"
+                    element={<AddUpdateReimbursementStatuses />} />
                   <Route path="*" element={<h1>Not Found</h1>} />
                 </Routes>
               </div>

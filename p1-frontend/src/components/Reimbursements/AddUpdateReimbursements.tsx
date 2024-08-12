@@ -9,9 +9,7 @@ import { ReimbursementStatusesContext } from "../../contexts/ReimbursementStatus
 import { UsersContext } from "../../contexts/UserContext";
 import toast from "react-hot-toast";
 
-type Props = {
-  reimb?: ReimbursementInterface;
-};
+type Props = {};
 
 const AddUpdateReimbursements = (props: Props) => {
   // Get the id from the URL
@@ -61,7 +59,11 @@ const AddUpdateReimbursements = (props: Props) => {
     if (id) {
       const curReimb = reimbursements.find((r) => r.reimbursementId === +id);
       if (curReimb) {
-        setReimb({...curReimb, statusId: curReimb.statusId?.statusId, userId: curReimb.userId?.userId});
+        setReimb({
+          ...curReimb,
+          statusId: curReimb.statusId?.statusId,
+          userId: curReimb.userId?.userId,
+        });
       }
     }
   };
@@ -84,9 +86,9 @@ const AddUpdateReimbursements = (props: Props) => {
       amount: reimb.amount,
       description: reimb.description,
       statusId: reimb.statusId,
-      userId: reimb.userId
+      userId: reimb.userId,
     };
-    
+
     if (id) {
       const response = await fetch(
         `http://localhost:8080/reimbursements/${id}`,
@@ -101,12 +103,14 @@ const AddUpdateReimbursements = (props: Props) => {
       )
         .then((response) => response.json())
         .then((json: ReimbursementInterface) => {
-          const index = reimbursements.findIndex(r => r.reimbursementId === +id);
+          const index = reimbursements.findIndex(
+            (r) => r.reimbursementId === +id
+          );
           if (index !== -1) {
             const updatedReimbursements = [
               ...reimbursements.slice(0, index),
               json,
-              ...reimbursements.slice(index + 1)
+              ...reimbursements.slice(index + 1),
             ];
             setReimbursements(updatedReimbursements);
           }
@@ -195,10 +199,7 @@ const AddUpdateReimbursements = (props: Props) => {
               </Form.Group>
               <br></br>
               <div className="d-flex justify-content-end">
-                <Button
-                  type="submit"
-                  className="btn-lg btn-primary"
-                >
+                <Button type="submit" className="btn-lg btn-primary">
                   Submit
                 </Button>
               </div>

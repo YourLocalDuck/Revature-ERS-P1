@@ -18,8 +18,8 @@ const ReimbursementsTable = (props: Props) => {
     ReimbursementsContext
   );
 
-  const handleDelete = (reimbursementId: number) => {
-    setDeleteModal({ ...deleteModal, show: true, id: reimbursementId });
+  const handleDelete = (reimbursementId: ReimbursementInterface) => {
+    setDeleteModal({ ...deleteModal, show: true, id: reimbursementId.reimbursementId ?? 0});
   };
 
   const confirmDelete = async () => {
@@ -36,7 +36,7 @@ const ReimbursementsTable = (props: Props) => {
     );
 
     if (response.ok) {
-      const updatedReimbursements = props.reimbursements.filter(
+      const updatedReimbursements = reimbursements.filter(
         (reimb) => reimb.reimbursementId !== deleteModal.id
       );
       setReimbursements(updatedReimbursements);
@@ -56,10 +56,11 @@ const ReimbursementsTable = (props: Props) => {
             <th>Amount</th>
             <th>Status</th>
             <th>User</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {props.reimbursements.map((reimb, index) => (
+          {reimbursements.map((reimb, index) => (
             <tr key={reimb.reimbursementId}>
               <td>{reimb.reimbursementId}</td>
               <td>{reimb.description}</td>
@@ -82,7 +83,7 @@ const ReimbursementsTable = (props: Props) => {
                   size="sm"
                   onClick={() =>
                     handleDelete(
-                      reimb.reimbursementId ? reimb.reimbursementId : 0
+                      reimb ? reimb : { reimbursementId: 0 }
                     )
                   }
                 >
@@ -111,7 +112,7 @@ const ReimbursementsTable = (props: Props) => {
             Close
           </Button>
           <Button variant="primary" onClick={confirmDelete}>
-            Save Changes
+            Confirm
           </Button>
         </Modal.Footer>
       </Modal>
