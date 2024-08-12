@@ -13,9 +13,11 @@ type Props = {
 };
 
 const AddUpdateReimbursements = (props: Props) => {
+  // Get the id from the URL
   const [searchParams] = useSearchParams();
   const { id } = useParams<{ id: string }>();
 
+  // Get the global state from the context for reimbursements, users, and statuses
   const { reimbursements, setReimbursements } = useContext(
     ReimbursementsContext
   );
@@ -26,9 +28,10 @@ const AddUpdateReimbursements = (props: Props) => {
     fetchReimbursementStatuses,
   } = useContext(ReimbursementStatusesContext);
 
-  const [reimb, setReimb] = React.useState<ReimbursementInterface>({
+  // Current Reimbursement state
+  const [reimb, setReimb] = React.useState<any>({
     amount: undefined,
-    description: "",
+    description: undefined,
     statusId: undefined,
     userId: undefined,
   });
@@ -57,7 +60,7 @@ const AddUpdateReimbursements = (props: Props) => {
     if (id) {
       const curReimb = reimbursements.find((r) => r.reimbursementId === +id);
       if (curReimb) {
-        setReimb(curReimb);
+        setReimb({...curReimb, statusId: curReimb.statusId?.statusId, userId: curReimb.userId?.userId});
       }
     }
   };
@@ -74,7 +77,16 @@ const AddUpdateReimbursements = (props: Props) => {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const reqReimb = {
+      amount: reimb.amount,
+      description: reimb.description,
+      statusId: reimb.statusId,
+      userId: reimb.userId
+    };
+    console.log(reqReimb);
+    
     if (id) {
       const response = await fetch(
         `http://localhost:8080/reimbursements/${id}`,
@@ -84,12 +96,20 @@ const AddUpdateReimbursements = (props: Props) => {
             "Content-Type": "application/json",
           },
           method: "PUT",
-          body: JSON.stringify({reimb}),
+          body: JSON.stringify(reqReimb),
         }
       )
         .then((response) => response.json())
         .then((json: ReimbursementInterface) => {
-          console.log(json);
+          const index = reimbursements.findIndex(r => r.reimbursementId === +id);
+          if (index !== -1) {
+            const updatedReimbursements = [
+              ...reimbursements.slice(0, index),
+              json,
+              ...reimbursements.slice(index + 1)
+            ];
+            setReimbursements(updatedReimbursements);
+          }
           navigate("/reimbursements");
         })
         .catch((error) => {
@@ -102,11 +122,11 @@ const AddUpdateReimbursements = (props: Props) => {
           "Content-Type": "application/json",
         },
         method: "POST",
-        body: JSON.stringify(reimb),
+        body: JSON.stringify(reqReimb),
       })
         .then((response) => response.json())
         .then((json: ReimbursementInterface) => {
-          console.log(json);
+          setReimbursements([json, ...reimbursements]);
           navigate("/reimbursements");
         })
         .catch((error) => {
@@ -120,7 +140,7 @@ const AddUpdateReimbursements = (props: Props) => {
       <Row className="justify-content-md-center w-100">
         <Col md={6}>
           <div className="p-5 border rounded shadow-sm bg-white">
-            <Form>
+            <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3" controlId="amount">
                 <Form.Label>Amount</Form.Label>
                 <Form.Control
@@ -143,7 +163,7 @@ const AddUpdateReimbursements = (props: Props) => {
                 <Form.Label>Status</Form.Label>
                 <Form.Select
                   aria-label="status"
-                  value={reimb?.statusId?.statusId}
+                  value={reimb?.statusId}
                   onChange={(e) => handleChange(e)}
                 >
                   <option>Select Status</option>
@@ -158,7 +178,7 @@ const AddUpdateReimbursements = (props: Props) => {
                 <Form.Label>User</Form.Label>
                 <Form.Select
                   aria-label="user"
-                  value={reimb?.userId?.userId}
+                  value={reimb?.userId}
                   onChange={(e) => handleChange(e)}
                 >
                   <option>Select User</option>
@@ -172,9 +192,8 @@ const AddUpdateReimbursements = (props: Props) => {
               <br></br>
               <div className="d-flex justify-content-end">
                 <Button
-                  type="button"
+                  type="submit"
                   className="btn-lg btn-primary"
-                  onClick={handleSubmit}
                 >
                   Submit
                 </Button>

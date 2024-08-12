@@ -27,13 +27,6 @@ const Reimbursements = (props: Props) => {
     navigate(path);
   };
 
-  const onEdit = (reimbursement: any) => {
-    console.log(reimbursement);
-  };
-  const onDelete = (reimbursementId: number) => {
-    console.log(reimbursementId);
-  };
-
   return (
     <div>
       <Row className="justify-content-md-center w-100">
@@ -47,7 +40,7 @@ const Reimbursements = (props: Props) => {
                         <Button variant="success" className="mb-3" onClick={handleNavigation("/reimbursements/add")}><FaPlus /> Add New</Button>
                     </div>
                 </div>
-                <ReimbursementsTable reimbursements={reimbursements} onEdit={onEdit} onDelete={onDelete} />
+                <ReimbursementsTable reimbursements={reimbursements} />
             </div>
         </Col>
       </Row>

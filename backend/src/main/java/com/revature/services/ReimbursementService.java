@@ -59,6 +59,7 @@ public class ReimbursementService {
         Optional<User> user = userDAO.findById(incomingReimbursement.getUserId());
 
         if (status.isPresent() && user.isPresent()) {
+            reimbursement.setReimbursementId(id);
             reimbursement.setStatusId(status.get());
             reimbursement.setUserId(user.get());
             return reimbursementDAO.save(reimbursement);
