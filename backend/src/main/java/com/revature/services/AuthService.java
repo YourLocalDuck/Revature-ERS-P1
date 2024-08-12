@@ -28,6 +28,10 @@ public class AuthService {
             return null;
         } else {
             OutgoingUserDTO outgoingUserDTO = new OutgoingUserDTO(u.getUserId(), u.getFirstName(), u.getLastName(), u.getUsername(), u.getRole());
+            session.setAttribute("userId", u.getUserId());
+            session.setAttribute("username", u.getUsername());
+            session.setAttribute("role", u.getRole());
+
             return outgoingUserDTO;
         }
     }
