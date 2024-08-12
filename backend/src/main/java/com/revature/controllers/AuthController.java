@@ -17,8 +17,6 @@ import jakarta.servlet.http.HttpSession;
 @RequestMapping("/auth/login")
 public class AuthController {
 
-    public static HttpSession session;
-
     private AuthService authService;
 
     @Autowired
@@ -27,8 +25,8 @@ public class AuthController {
     }
 
     @PostMapping
-    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO) {
-        OutgoingUserDTO outUser = authService.login(loginDTO);
+    public ResponseEntity<?> login(@RequestBody LoginDTO loginDTO, HttpSession session) {
+        OutgoingUserDTO outUser = authService.login(loginDTO, session);
 
         if (outUser == null) {
             return ResponseEntity.badRequest().body("Invalid credentials");
