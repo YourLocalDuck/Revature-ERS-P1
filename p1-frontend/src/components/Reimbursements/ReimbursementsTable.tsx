@@ -23,6 +23,13 @@ const ReimbursementsTable = (props: Props) => {
     setDeleteModal({ ...deleteModal, show: true, id: reimbursementId.reimbursementId ?? 0});
   };
 
+  const formatCurrency = (amount: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+    }).format(amount / 100);
+  };
+
   const confirmDelete = async () => {
     setDeleteModal({ ...deleteModal, show: false });
     const response = await fetch(
@@ -69,7 +76,7 @@ const ReimbursementsTable = (props: Props) => {
             <tr key={reimb.reimbursementId}>
               <td>{reimb.reimbursementId}</td>
               <td>{reimb.description}</td>
-              <td>{reimb.amount}</td>
+              <td>{formatCurrency(reimb.amount ?? 0)}</td>
               <td>{reimb.statusId?.status}</td>
               <td>{reimb.userId?.username}</td>
               <td>

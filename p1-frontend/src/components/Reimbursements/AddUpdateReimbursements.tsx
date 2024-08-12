@@ -85,7 +85,7 @@ const AddUpdateReimbursements = (props: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const reqReimb = {
-      amount: reimb.amount,
+      amount: Math.round(reimb.amount * 100),
       description: reimb.description,
       statusId: user.role?.roleName === "Employee" ? reimbursementStatuses.find(r => r.status === "PENDING")?.statusId : reimb.statusId,
       userId: user.role?.roleName === "Employee" ? user.userId : reimb.userId,
@@ -154,10 +154,12 @@ const AddUpdateReimbursements = (props: Props) => {
               <Form.Group className="mb-3" controlId="amount">
                 <Form.Label>Amount</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter Amount"
-                  defaultValue={reimb?.amount}
+                  type="number"
+                  step="0.01"
+                  name="amount"
+                  value={reimb?.amount}
                   onChange={(e) => handleChange(e)}
+                  required
                 />
               </Form.Group>
               <Form.Group className="mb-3" controlId="description">
