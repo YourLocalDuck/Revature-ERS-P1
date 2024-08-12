@@ -5,6 +5,7 @@ import { FaPencilAlt, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { UsersContext } from "../../contexts/UserContext";
 import toast from "react-hot-toast";
+import { ReimbursementsContext } from "../../contexts/ReimbursementContext";
 
 type Props = {
   users: UserInterface[];
@@ -18,6 +19,7 @@ const UsersTable = (props: Props) => {
     user: {} as UserInterface,
   });
   const { users, setUsers } = useContext(UsersContext);
+  const { reimbursements, setReimbursements } = useContext(ReimbursementsContext);
 
   const handleDelete = (userId: UserInterface) => {
     setDeleteModal({ ...deleteModal, show: true, user: userId });
@@ -41,6 +43,11 @@ const UsersTable = (props: Props) => {
         (user) => user.userId !== deleteModal.user.userId
       );
       setUsers(updatedUsers);
+      // Remove any reimbursements associated with this user
+      const updatedReimbursements = reimbursements.filter(
+        (reimb) => reimb.userId?.userId !== deleteModal.user.userId
+      );
+      setReimbursements(updatedReimbursements);
       toast.success(`User ${deleteModal.user.username} deleted successfully.`);
     } else {
       toast.error(`Error deleting user ${deleteModal.user.username}.`);

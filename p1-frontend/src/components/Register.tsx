@@ -58,7 +58,9 @@ const Register = (props: Props) => {
         "Content-Type": "application/json",
       },
       method: "POST",
-      body: JSON.stringify(reqUser),
+
+      // Default roleId must be the one associated with the "Employee" role
+      body: JSON.stringify({...reqUser, roleId: roles.find(r => r.roleName === "Employee")?.roleId}),
     })
       .then((response) => response.json())
       .then((json: UserInterface) => {
@@ -130,22 +132,6 @@ const Register = (props: Props) => {
                   value={user.email}
                   onChange={handleChange}
                 />
-              </Form.Group>
-
-              <Form.Group className="mb-3" controlId="roleId">
-                <Form.Label>Role</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={user.roleId}
-                  onChange={handleChange}
-                >
-                  <option value="">Select role</option>
-                  {roles.map((role) => (
-                    <option key={role.roleId} value={role.roleId}>
-                      {role.roleName}
-                    </option>
-                  ))}
-                </Form.Control>
               </Form.Group>
 
               <Button variant="primary" type="submit" className="w-100 mb-3">
